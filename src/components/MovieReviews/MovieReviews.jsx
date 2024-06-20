@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { getMovieReviews } from "../../getMovies";
 import { useEffect, useState } from "react";
+import css from "../MovieReviews/MovieReviews.module.css";
 
 export default function MovieReviews() {
   const { movieId } = useParams();
@@ -19,18 +20,18 @@ export default function MovieReviews() {
   }, [movieId]);
 
   return (
-    <ul>
+    <ul className={css.list}>
       {movieReviews.length > 0 ? (
         movieReviews.map(({ author, content, id }) => {
           return (
-            <li key={id}>
-              <h3>Author {author}</h3>
-              <p>{content}</p>
+            <li key={id} className={css.item}>
+              <h3 className={css.author}>Author {author}</h3>
+              <p className={css.content}>{content}</p>
             </li>
           );
         })
       ) : (
-        <p>We have no reviews for this movie</p>
+        <p className={css.no_reviews}> We have no reviews for this movie</p>
       )}
     </ul>
   );
