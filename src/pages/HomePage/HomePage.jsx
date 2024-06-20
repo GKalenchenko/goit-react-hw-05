@@ -19,10 +19,10 @@ export default function HomePage() {
 
   return (
     <ul>
-      {trendMovies.map((movie) => {
+      {trendMovies.map(({ id, title }) => {
         return (
-          <Link key={movie.id}>
-            <p>{movie.title}</p>
+          <Link key={id} to={`/movies/${id}`}>
+            <p>{title}</p>
           </Link>
         );
       })}
