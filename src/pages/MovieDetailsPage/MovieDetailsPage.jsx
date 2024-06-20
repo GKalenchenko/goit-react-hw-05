@@ -1,11 +1,14 @@
-import { Link, Outlet, useParams } from "react-router-dom";
+import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 import { getMovieById } from "../../getMovies";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import css from "../MovieDetailsPage/MovieDetailsPage.module.css";
+import { Suspense } from "react";
 
 export default function MovieDetailsPage() {
   const [selectedMovie, setSelectedMovie] = useState({});
+  const location = useLocation();
   const { movieId } = useParams();
+  const backHref = useRef(location.state?.from || "/");
 
   useEffect(() => {
     async function getFilm() {
@@ -23,24 +26,40 @@ export default function MovieDetailsPage() {
     selectedMovie;
 
   return (
-    <div>
+    <div className={css.container}>
+      <Link to={backHref.current} className={css.goBackLink}>
+        Go back
+      </Link>
       <img
         src={poster_path && `https://image.tmdb.org/t/p/w300${poster_path}`}
-        className=""
+        className={css.movieImage}
       ></img>
-      <h2>{original_title}</h2>
-      <p>User Score {vote_average && vote_average.toFixed(1)}</p>
-      <h3>Overview</h3>
+      <h2 className={css.movieTitle}>{original_title}</h2>
+      <p className={css.userScore}>
+        User Score {vote_average && vote_average.toFixed(1)}
+      </p>
+      <h3 className={css.sectionTitle}>Overview</h3>
       <p>{overview}</p>
-      <h3>Genres</h3>
+      <h3 className={css.sectionTitle}>Genres</h3>
       <ul className={css.list}>
         {genres &&
           genres.length &&
-          genres.map(({ id, name }) => <li key={id}>{name}</li>)}
+          genres.map(({ id, name }) => (
+            <li className={css.item} key={id}>
+              {name}
+            </li>
+          ))}
       </ul>
-      <Link to="cast">Movie cast</Link>
-      <Link to="reviews">Reviews</Link>
-      <Outlet />
+      <Link to="cast" state={{ ...location.state }} className={css.subLink}>
+        Movie cast
+      </Link>
+      <Link to="reviews" state={{ ...location.state }} className={css.subLink}>
+        Reviews
+      </Link>
+
+      <Suspense>
+        <Outlet />
+      </Suspense>
     </div>
   );
 }
