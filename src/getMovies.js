@@ -31,6 +31,7 @@ const getMovieReviews = async (id) => {
   const response = await axios.get(
     `movie/${id}/reviews?language=en-US&page=1&api_key=${KEY}`
   );
+  return response.data;
 };
 
 export {
