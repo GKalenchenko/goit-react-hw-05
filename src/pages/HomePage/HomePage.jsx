@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { getTrendMovies, getMovieCredits } from "../../getMovies";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import css from "../HomePage/HomePage.module.css";
+import MovieList from "../../components/MovieList/MovieList";
 
 export default function HomePage() {
   const [trendMovies, setTrendMovies] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
     async function handelTrendMovies() {
@@ -20,18 +22,8 @@ export default function HomePage() {
 
   return (
     <div className="container">
-      <h2 className={css.hero_title}>Trend Today !</h2>
-      <ul className={css.list}>
-        {trendMovies.map(({ id, title }) => {
-          return (
-            <li className={css.item} key={id}>
-              <Link to={`/movies/${id}`} className={css.link}>
-                <h3 className={css.title}>{title}</h3>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      <h2 className={css.title}>Trend Today !</h2>
+      <MovieList movies={trendMovies} location={location} />
     </div>
   );
 }
