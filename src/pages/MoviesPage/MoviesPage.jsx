@@ -19,7 +19,6 @@ export default function MoviesPage() {
     const getMovie = async (keyWord) => {
       try {
         await getMovieByKeyword(keyWord).then((data) => {
-          console.log(data);
           setMovieList(data.results);
         });
       } catch (error) {
@@ -40,7 +39,9 @@ export default function MoviesPage() {
   return (
     <div className={css.container}>
       <SearchBar onSubmit={handleSubmit} />
-      <MovieList movies={movieList} location={location} />
+      {movieList.length > 0 && (
+        <MovieList movies={movieList} location={location} />
+      )}
     </div>
   );
 }
